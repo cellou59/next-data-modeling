@@ -4,10 +4,11 @@ import {AddTodo, Todo} from '@/lib/type'
 import {revalidatePath} from 'next/cache'
 // 🐶 Importe `createPool`
 // 🤖 import {createPool} from '@vercel/postgres'
-
+import {Pool} from 'pg'
 // 🐶 Crée une instance de `pool`
-// 🤖 const pool = createPool ...
-
+const pool = new Pool({
+  connectionString: 'postgres://user:password@host:port/db',
+})
 export const addTodo = async (todo: AddTodo) => {
   console.log('add todo action', todo)
   try {
