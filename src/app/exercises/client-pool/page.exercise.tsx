@@ -1,8 +1,8 @@
 // 🐶 Importe le Type `Todo` il nous sera utile pour typer les données reçues
-// import {Todo} from '@/lib/type'
+import {Todo} from '@/lib/type'
 
 // 🐶 Importe la classe `Client` elle nous permettra d'instancier un client `postgres`
-// import {Client} from 'pg'
+import {Pool} from 'pg'
 
 async function getTodos() {
   // 🐶 Crée une instance de `Client` avec les informations de connexion
@@ -14,29 +14,18 @@ async function getTodos() {
   // 📑 doc : https://node-postgres.com/apis/client
 
   // 🤖 const client = new Client({...
-
+  const client = new Pool({
+    connectionString: process.env.POSTGRES_URL,
+  })
   // 🐶 Connecte toi à la base de données
   // 📑 doc : https://node-postgres.com/features/connecting#environment-variables
-
-  // 🤖 await client.connect()
-
   // 🐶 Récupère les données de la table `Todo` avec la requête SQL suivante
-  // 🤖 `SELECT id, title, iscompleted AS "isCompleted",  createdat AS "createdAt",  updatedat AS "updatedAt" from Todo`
+  const query = `SELECT 
+  id, title, iscompleted AS "isCompleted",  createdat AS "createdAt",  updatedat AS "updatedAt" 
+  FROM Todo`
 
   // 🐶 Pour exécuter cette requête :
-  // 🤖 const {rows} = await client.query<Todo>(`SELECT ...`)
-
-  const rows = [
-    {
-      id: 1,
-      title: 'Fake Data',
-      isCompleted: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
-  // 🐶 Déconnecte toi de la base de données avec
-  // 🤖 await client.end()
+  const {rows} = await client.query<Todo>(query)
   return rows
 }
 
